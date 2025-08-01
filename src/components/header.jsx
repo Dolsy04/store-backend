@@ -1,4 +1,4 @@
-import logo from "../../public/logo.png";
+import logo from "/logo.png";
 import { MdMessage } from "react-icons/md";
 
 function Header(){

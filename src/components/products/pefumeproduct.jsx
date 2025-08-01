@@ -1,27 +1,27 @@
 import { useState, useEffect } from "react";
-import ShownShoeProduct from "./shoeproduct/showshoeproduct.jsx";
 import StatisticsOverview from "./productstatistics/productstatistics.jsx";
-import AddShoeProduct from "./shoeproduct/addshoeproduct.jsx";
+import ShowPerfumeProduct from "./pefumeproduct/shownpefumeproduct.jsx"
+import AddPerfumeProduct from "./pefumeproduct/addpefumeproduct.jsx";
 
-function ShoeProducts(){
+function PefumeProducts(){
     const [isLoading, setIsLoading] = useState(false);
     
     const outletShown = [
         {id: 1, title: "Product Statistics", component: <StatisticsOverview />},
-        {id: 2, title: "Add New Product (Shoe)", component: <AddShoeProduct />},
-        {id: 3, title: "Avaliable Products", component: <ShownShoeProduct />},
+        {id: 2, title: "Add New Products (Pefume)", component: <AddPerfumeProduct />},
+        {id: 3, title: "Avaliable Products (Pefume)", component: <ShowPerfumeProduct />},
     ]
 
     const navBtn = [
         {id: 1, title: "Product Statistics", component: <StatisticsOverview />},
-        {id: 2, title: "Add New Product (Shoe)", component: <AddShoeProduct />},
-        {id: 3, title: "Show Avaliable Product (Shoe)", component: <ShownShoeProduct /> }
+        {id: 2, title: "Add New Product (Pefume)", component: <AddPerfumeProduct />},
+        {id: 3, title: "Show Avaliable Product (Pefume)", component: <ShowPerfumeProduct /> }
     ]
 
     const [selectedInnerPage, setSelectedInnerPage] = useState(outletShown[0])
 
     return(<>
-        <h3 className="mt-10 font-semibold text-2xl capitalize font-[mulish] text-[#131]">Shoe Product</h3>
+        <h3 className="mt-10 font-semibold text-2xl capitalize font-[mulish] text-[#131]">Pefume Products</h3>
         <p className="text-gray-500 text-sm font-[mulish]">Here product are added to database and are publicly on main website and preview are shown here when click on show avaliable product</p>
 
         <div className="mt-4 flex items-center gap-5">
@@ -42,4 +42,4 @@ function ShoeProducts(){
     </>)
 }
 
-export default ShoeProducts
+export default PefumeProducts

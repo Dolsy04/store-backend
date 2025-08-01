@@ -1,4 +1,4 @@
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/db.js";
 import { useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -8,24 +8,24 @@ import { MdDelete, MdOutlineError } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
-function ShownShoeProduct(){
+function Showclothproduct(){
    const [isLoading, setIsLoading] = useState(false);
-   const [filterShoeproduct, setFliteredShoeProduct] = useState([]);
-   const [allShoeProducts, setAllShoeProducts] = useState([]);
+   const [filterclothproduct, setFliteredClothProduct] = useState([]);
+   const [allClothProducts, setAllClothProducts] = useState([]);
    const [searchInput, setSearchInput] = useState("")
    const [currentPage, setCurrentPage] = useState(1);
    const { setResponseMessage } = useOutletContext();
 
-   const fetchShoeProduct =  () => {
+   const fetchClothProduct =  () => {
       setIsLoading(true);
       
-      const getProductRef = query(collection(db, "shoeproductDB"), orderBy("createdAt", "desc"));
+      const getProductRef = collection(db, "clothproductDB");
       const productSnapShot =  onSnapshot(getProductRef, (snapshot) => {
          const products = snapshot.docs.map(doc =>({
                id: doc.id, ...doc.data(),
          }));
-         setFliteredShoeProduct(products);
-         setAllShoeProducts(products);
+         setFliteredClothProduct(products);
+         setAllClothProducts(products);
          console.log(products);
          setIsLoading(false)
       },(error) => {
@@ -37,7 +37,7 @@ function ShownShoeProduct(){
    }
 
    useEffect(() => {
-      const getProduct = fetchShoeProduct()
+      const getProduct = fetchClothProduct()
       return () => {
          getProduct();
       }
@@ -45,23 +45,23 @@ function ShownShoeProduct(){
 
    useEffect(() => {
       if(searchInput.trim()){
-         const filterResult = allShoeProducts.filter(item => item.productName?.toLowerCase().includes(searchInput.toLowerCase()) || String(item.productPrice).toLowerCase().includes(searchInput.toLowerCase()) || item.productDescription?.toLowerCase().includes(searchInput.toLowerCase()));
+         const filterResult = allClothProducts.filter(item => item.productName?.toLowerCase().includes(searchInput.toLowerCase()) || String(item.productPrice).toLowerCase().includes(searchInput.toLowerCase()) || item.productDescription?.toLowerCase().includes(searchInput.toLowerCase()));
 
-         setFliteredShoeProduct(filterResult);
+         setFliteredClothProduct(filterResult);
          setCurrentPage(1)
       }else{
-         setFliteredShoeProduct(allShoeProducts);
+         setFliteredClothProduct(allClothProducts);
       }
-   },[searchInput, allShoeProducts]);
+   },[searchInput, allClothProducts]);
 
-   const paginatedPage = filterShoeproduct.slice((currentPage - 1) * 12, currentPage * 12)
-   const totalPages = Math.ceil(filterShoeproduct.length / 12);
+   const paginatedPage = filterclothproduct.slice((currentPage - 1) * 12, currentPage * 12)
+   const totalPages = Math.ceil(filterclothproduct.length / 12);
 
    return(<>
-      <div className="w-full my-4 flex items-center justify-between ">
+      <div className="w-full my-4 flex items-center justify-between">
          <div className="w-[400px] h-auto">
             <h3 className="font-[mulish] text-lg font-semibold text-gray-700 tracking-wide">Show Available Product</h3>
-            <p className="font-[mulish] text-sm font-light text-gray-500 tracking-wide">Here product view and able to take actions (Edit, delete & view details) of each product. <strong><em> Product affected by actions will be publicly to the linked website.</em></strong></p>
+            <p className="font-[mulish] text-sm font-light text-gray-500 tracking-wide">Here you can view all available products and take actions such as editing, deleting, or viewing details of each product. <strong className="font-semibold"><em> Product affected by actions will be publicly to the linked website.</em></strong></p>
          </div>
          <div className=" w-[400px] h-[44px] bg-[#f1f1f1] inset-ring-2 inset-ring-white rounded-full flex items-center justify-between">
             <IoSearch className="ml-4" color="gray" size={20}/>
@@ -70,6 +70,7 @@ function ShownShoeProduct(){
       </div>
       <div>
          <div>
+
             {isLoading ? (
                <div className="w-full h-auto">
                <div className="flex items-center justify-center flex-col w-[900px] h-[300px]">
@@ -83,15 +84,15 @@ function ShownShoeProduct(){
                <p className="text-center mt-2 text-md font-medium fomt[mulish] text-gray-500">Generating avaliable product....</p>
                </div>
             </div>
-            ) : allShoeProducts.length === 0 ? (
+            ) : allClothProducts.length === 0 ? (
                <div className="bg-amber-100 w-full h-[44px] flex items-center justify-between my-15 rounded">
                   <p className="w-[8px] h-full bg-red-600 p-1"></p>
                   <p className="text-red-500 text-md font-semibold font-[mulish] text-center flex items-center justify-center gap-2 py-3 w-full rounded-md">
                      <MdOutlineError />
-                     No shoes available right now. Try adding a new one!
+                     No cloth available right now. Try adding a new one!
                   </p>
                </div>
-            ) : searchInput.trim() && filterShoeproduct.length === 0 ? (
+            ) : searchInput.trim() && filterclothproduct.length === 0 ? (
                <div className="bg-amber-100 w-full h-[44px] flex items-center justify-between my-15 rounded">
                   <p className="w-[8px] h-full bg-red-600 p-1"></p>
                   <p className="text-red-500 text-md font-semibold font-[mulish] text-center flex items-center justify-center gap-2 py-3 w-full rounded-md">
@@ -108,7 +109,7 @@ function ShownShoeProduct(){
                         
                      <div className="mt-1 p-2">
                         <p className="text-gray-600 capitalize text-sm font-semibold font-[mulish] tracking-wide">{product.productName}</p>
-                        <p className="text-gray-500 text-[13px] font-extralight font-[mulish] tracking-wide">{product.productDescription.slice(0, 50)} ....</p>
+                        <p className="text-gray-500 text-[13px] font-extralight font-[mulish] tracking-wide">{product.productDescription.slice(0, 20)}</p>
                      </div>
 
                      <div className="px-3 flex items-center justify-between">
@@ -132,9 +133,10 @@ function ShownShoeProduct(){
                   <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)} className={`rounded p-1 shadow ${currentPage === totalPages ? " bg-zinc-100 cursor-auto" : "bg-white cursor-pointer"}`}><IoIosArrowForward size={20} color="gray"/></button>
                </div>
             </div>
+         
          </div>
       </div>
    </>);
 }
 
-export default ShownShoeProduct
+export default Showclothproduct

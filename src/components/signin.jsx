@@ -63,8 +63,10 @@ function SignIn(){
         <section className="w-full h-screen overflow-hidden">
             <div className="flex items-start justify-between w-full h-full">
                 <div className="relative max-w-[700px] w-full h-full flex flex-col items-center justify-center">
-                    <div className={`absolute top-3 right-2 transition-all duration-500 ease-in-out transform ${response ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}>
-                        <p className="font-bold text-md tracking-wide text-white font-[mulish] bg-red-500 py-2 px-2 rounded text-sm">{count} - {response}</p>
+                    <div className={`bg-red-600 flex items-center justify-center flex-col gap-1 absolute top-3 p-2 rounded-2xl right-2 transition-all duration-500 ease-in-out transform ${response ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}>
+                        <p className="font-bold tracking-wide text-white font-[mulish] py-2 px-2 rounded text-sm">{response}</p>
+                        <p className="font-[mulish] text-sm font-medium text-white">closing</p>
+                        <p className="font-[mulish] text-sm font-medium w-[40px] h-[40px] rounded-full border-2 border-white text-white flex items-center justify-center">{count}s</p>
                     </div>
                     <div className="bg-white max-w-[400px] w-full shadow-xl p-2 rounded-md">
                         <h2 className="text-3xl font-bold font-[Montserrat] tracking-wide text-blue-700 px-2 uppercase">Sign In</h2>

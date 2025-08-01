@@ -4,7 +4,7 @@ import { db } from "../../../firebase/db.js";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { useOutletContext } from "react-router-dom";
 
-function AddShoeProduct(){
+function AddPerfumeProduct(){
     const [imagePreview, setImagePreview] = useState("");
     const [base64Image, setBase64Image] = useState("");
     const [dragActive, setDragActive] = useState(false);
@@ -65,7 +65,7 @@ function AddShoeProduct(){
         setIsLoading(true);
         const id = productName.toLowerCase().replace(/\s+/g, "-");
         try{
-            await setDoc(doc(db, "shoeproductDB", id),{
+            await setDoc(doc(db, "perfumeproductDB", id),{
                 id: id,
                 productName: productName,
                 productPrice: productPrice,
@@ -141,4 +141,5 @@ function AddShoeProduct(){
     </>)
 }
 
-export default AddShoeProduct
+export default AddPerfumeProduct
+

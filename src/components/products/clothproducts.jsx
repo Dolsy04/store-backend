@@ -1,23 +1,21 @@
-
-
 import { useState, useEffect } from "react";
-import clothOverview from "./clothproduct/clothoview.jsx";
-import ShownShoeProduct from "./shoeproduct/showshoeproduct.jsx";
-import AddShoeProduct from "./shoeproduct/addshoeproduct.jsx";
+import StatisticsOverview from "./productstatistics/productstatistics.jsx";
+import Showclothproduct from "./clothproduct/shownclothproduct.jsx";
+import AddClothProduct from "./clothproduct/addclothproduct.jsx";
 
 function ClothProducts(){
     const [isLoading, setIsLoading] = useState(false);
     
     const outletShown = [
-        {id: 1, title: "Cloths Statistics", component: <clothOverview />},
-        {id: 2, title: "Add Products", component: <AddShoeProduct />},
-        {id: 3, title: "Avaliable Products", component: <ShownShoeProduct />},
+        {id: 1, title: "Product Statistics", component: <StatisticsOverview />},
+        {id: 2, title: "Add New Products (Cloth)", component: <AddClothProduct />},
+        {id: 3, title: "Show Avaliable Products  (Cloth)", component: <Showclothproduct/>},
     ]
 
     const navBtn = [
-        {id: 1, title: "Cloth Statistics", component: <clothOverview />},
-        {id: 2, title: "Add New Product", component: <AddShoeProduct />},
-        {id: 3, title: "Show Avaliable Product", component: <ShownShoeProduct /> }
+        {id: 1, title: "Product Statistics", component: <StatisticsOverview />},
+        {id: 2, title: "Add New Product (Cloth)", component: <AddClothProduct />},
+        {id: 3, title: "Show Avaliable Product (Cloth)", component: <Showclothproduct/> },
     ]
 
     const [selectedInnerPage, setSelectedInnerPage] = useState(outletShown[0])
@@ -37,7 +35,7 @@ function ClothProducts(){
         <div className="mt-7">
             <p className="mb-2 font-[mulish] tracking-wide text-md text-gray-700">{selectedInnerPage.title}</p>
 
-            <div className="w-full flex items-center gap-8">
+            <div className="w-full">
                 {selectedInnerPage.component}
             </div>
         </div>

@@ -1,18 +1,15 @@
 import { useState } from "react";
 import ShoeProducts from "./shoeproducts.jsx"
 import ClothProducts from "./clothproducts.jsx";
+import PefumeProducts from "./pefumeproduct.jsx";
 function ProductsContent(){
     const productNav = [
         {id: 1, title: "Cloth products", component: <ClothProducts />},
         {id: 2, title: "Shoe products",component: <ShoeProducts/>},
-        {id: 3, title: "Pefume products", component: "Pefumes Component"}
+        {id: 3, title: "Pefume products", component: <PefumeProducts />}
     ]
 
-
     const [selectedProduct, setSelectedProduct] = useState(productNav[0]);
-
-
-
 
     return(<>
         <section className="">
