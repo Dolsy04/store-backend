@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { auth } from "../firebase/db.js";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Sidebar(){
     const [isLoading, setLoading] = useState(false);
@@ -44,6 +45,8 @@ function Sidebar(){
         await signOut(auth);
         navigate("/")
         localStorage.clear();
+        
+        toast.success("Logout successfully", {position: "top-center", autoClose: 1000})
 
         // Prevent browser back navigation
         window.history.pushState(null, "", window.location.href);
