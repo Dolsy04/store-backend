@@ -1,4 +1,4 @@
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../firebase/db.js";
 import { useOutletContext } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -6,7 +6,9 @@ import { TbCurrencyNaira } from "react-icons/tb";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete, MdOutlineError } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
-import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward, IoIosArrowBack,IoIosArrowRoundBack } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
+
 
 function showPerfumeProduct(){
    const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +17,14 @@ function showPerfumeProduct(){
    const [searchInput, setSearchInput] = useState("")
    const [currentPage, setCurrentPage] = useState(1);
    const { setResponseMessage } = useOutletContext();
+   const [editingModal, setEditingModal] = useState(false)
+   const [selectedPefumeProduct, setSelectedPefumeProduct] = useState(null)
+   const [updateProductName, setUpdateProductName] = useState("")
+   const [updateProductDetail, setUpdateProductDetail] = useState("")
+   const [updateProductPrice, setUpdateProductPrice] = useState("")
+   const [updateProductImage, setUpdateProductImage] = useState("")
+   const [imagePreview, setImagePreview] = useState("");
+   const [detailModal, setDetailModal] = useState(false);
 
    const fetchClothProduct =  () => {
       setIsLoading(true);
@@ -56,6 +66,68 @@ function showPerfumeProduct(){
 
    const paginatedPage = filterPefumeproduct.slice((currentPage - 1) * 12, currentPage * 12)
    const totalPages = Math.ceil(filterPefumeproduct.length / 12);
+
+
+
+   const handleEditProduct = (product) =>{
+      setSelectedPefumeProduct(product)
+      setUpdateProductName(product.productName || "");
+      setUpdateProductDetail(product.productDescription || "");
+      setUpdateProductPrice(product.productPrice || "");
+      setUpdateProductImage(product.productImage || "");
+      setImagePreview(product.productImage || "");
+   }
+   
+   const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+         setImagePreview(URL.createObjectURL(file));
+         const reader = new FileReader();
+         reader.readAsDataURL(file);
+         reader.onloadend = () => {
+            setUpdateProductImage(reader.result); // store base64
+         };
+      }
+   };
+
+   const handleUpdateProduct = async (e) => {
+      e.preventDefault();
+      if (!updateProductName.trim() || !updateProductPrice.trim()) {
+         setResponseMessage("Name and Price are required");
+         return;
+      }
+      setIsLoading(true)
+      try {
+         const productRef = doc(db, "perfumeproductDB", selectedPefumeProduct.id);
+         await updateDoc(productRef, {
+            productName: updateProductName,
+            productPrice: updateProductPrice,
+            productDescription: updateProductDetail,
+            productImage: updateProductImage, // updated if new image uploaded
+         });
+
+         setResponseMessage("Product updated successfully ✅");
+         setEditingModal(false);
+      } catch (error) {
+         setResponseMessage(`Error updating product: ${error.message}`);
+         setIsLoading(false)
+      }finally{
+         setIsLoading(false)
+      }
+   };
+
+   const handleDelete = async (productId) => {
+      const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+      if (!confirmDelete) return;
+
+      try {
+         await deleteDoc(doc(db, "perfumeproductDB", productId));
+         alert("Product deleted successfully ✅");
+      } catch (error) {
+         console.error("Error deleting product:", error);
+         alert("Failed to delete product ❌");
+      }
+   };
 
    return(<>
       <div className="w-full my-4 flex items-center justify-between">
@@ -109,15 +181,15 @@ function showPerfumeProduct(){
                         
                      <div className="mt-1 p-2">
                         <p className="text-gray-600 capitalize text-sm font-semibold font-[mulish] tracking-wide">{product.productName}</p>
-                        <p className="text-gray-500 text-[13px] font-extralight font-[mulish] tracking-wide">{product.productDescription.slice(0, 20)}</p>
+                        <p className="text-gray-500 text-[13px] font-extralight font-[mulish] tracking-wide">{product.productDescription.slice(0, 50)}....</p>
                      </div>
 
                      <div className="px-3 flex items-center justify-between">
-                        <p className="flex items-center text-sm text-gray-600 font-medium tracking-wide font-[mulish]"><TbCurrencyNaira size={20}/>{product.productPrice}</p>
-                        <div className="flex items-center gap-3">
-                           <BiEdit className="bg-white p-0.5 rounded shadow cursor-pointer" size={20}/>
-                           <MdDelete className="bg-red-600 p-0.5 rounded shadow cursor-pointer" size={20} color="white"/>
-                           <button className="bg-blue-600 text-sm text-white p-0.5 rounded shadow cursor-pointer" size={20}>Details</button>
+                        <p className="flex items-center text-sm text-gray-600 font-medium tracking-wide font-[mulish]"><TbCurrencyNaira size={20}/>{Number(product.productPrice).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                        <div className="flex items-center justify-end gap-1">
+                           <BiEdit onClick={()=> {setEditingModal(true); handleEditProduct(product)}} className="bg-white p-0.5 rounded shadow cursor-pointer" size={20}/>
+                           <MdDelete onClick={()=> handleDelete(product.id)} className="bg-red-600 p-0.5 rounded shadow cursor-pointer" size={20} color="white"/>
+                           <button onClick={()=> {setDetailModal(true); handleEditProduct(product)}} className="bg-blue-600 text-xs text-white p-0.5 rounded shadow cursor-pointer" size={20}>Details</button>
                         </div>
                      </div>
                   </div>
@@ -133,8 +205,86 @@ function showPerfumeProduct(){
                   <button disabled={currentPage === totalPages} onClick={() => setCurrentPage((prev) => prev + 1)} className={`rounded p-1 shadow ${currentPage === totalPages ? " bg-zinc-100 cursor-auto" : "bg-white cursor-pointer"}`}><IoIosArrowForward size={20} color="gray"/></button>
                </div>
             </div>
-         
          </div>
+      </div>
+
+      
+      {/* Edit modal */}
+      <div className={`w-full h-screen bg-[#000000ab] fixed top-0 z-50 transition-all duration-300 ${editingModal ? "right-0" : "right-[-100%]"}`}>
+         {editingModal && selectedPefumeProduct && (
+         <div className="w-[40%] h-screen bg-white absolute right-0 z-60 overflow-y-auto">
+            <div className="flex items-center justify-between px-4 py-3 bg-white shadow sticky top-0">
+               <h3 className="capitalize font-[mulish] text-lg tracking-wide font-semibold text-blue-600">#Editing {selectedPefumeProduct.productName}</h3>
+               <IoClose onClick={()=> setEditingModal(false)} size={20} className="w-[30px] h-[30px] text-red-600 bg-white shadow rounded-md cursor-pointer"/>
+            </div>
+               <div className="p-4">
+               <div>
+                  <p className="text-xl font-[mulish] font-semibold text-blue-600">Editing...</p>
+               </div>
+               <form onSubmit={handleUpdateProduct}>
+                  <div className="flex items-start flex-col gap-1 w-full mt-5">
+                     <label htmlFor="productName" className="text-sm font-[mulish] tracking-wide">Product Name</label>
+                     <input type="text" value={updateProductName} onChange={(e)=> setUpdateProductName(e.target.value)} className="w-full h-[40px] border-2 border-gray-300 rounded-md text-base font-[mulish] capitalize px-2 focus:border-blue-600 outline-none"/>
+                  </div>
+
+                  <div className="flex items-start flex-col gap-1 w-full mt-5">
+                     <label htmlFor="productPrice" className="text-sm font-[mulish] tracking-wide">Product Price</label>
+                     <input type="text" value={updateProductPrice} onChange={(e)=> setUpdateProductPrice(e.target.value)} className="w-full h-[40px] border-2 border-gray-300 rounded-md text-base font-[mulish] capitalize px-2 focus:border-blue-600 outline-none"/>
+                  </div>
+
+                  <div className="flex items-start flex-col gap-1 w-full h-auto mt-5">
+                     <label htmlFor="productName" className="text-sm font-[mulish] tracking-wide">Product Details</label>
+                     <div className="w-full h-[150px]">
+                        <textarea value={updateProductDetail} onChange={(e)=> setUpdateProductDetail(e.target.value)} className="w-full h-full border-2 border-gray-300 rounded-md text-base font-[mulish] capitalize p-2 focus:border-blue-600 outline-none resize-none"></textarea>
+                     </div>
+                  </div>
+
+                  <div className="flex items-start flex-col gap-1 w-full mt-5">
+                     <label htmlFor="productImage" className="text-sm font-[mulish] tracking-wide">Select Product Image</label>
+                     <input type="file" onChange={handleFileChange} className="w-full h-[40px] border-2 border-gray-300 rounded-md text-base font-[mulish] capitalize px-2 pt-2 focus:border-blue-600 outline-none"/>
+                  {/* image preview */}
+                  <div className="w-[150px] h-[150px] border my-3">
+                     {imagePreview && (
+                        <img src={imagePreview} className="w-full h-full object-cover"/>
+                     )}
+                  </div>
+                  </div>
+                  <button disabled={isLoading} className={`w-full h-[44px] my-3 bg-blue-600 text-white rounded-md ${isLoading ? "cursor-not-allowed bg-blue-400" : "cursor-pointer"}`}>{isLoading ? "Loading......" : "Update"}</button>
+               </form>
+               </div>
+         </div>
+         )}
+      </div>
+
+      
+      
+      {/* modal for details */}
+      
+      <div className={`w-full h-screen bg-[#000000ab] fixed top-0 z-50 transition-all duration-300  ${detailModal ? "right-0" : "right-[-100%]"}`}>
+            {detailModal && selectedPefumeProduct &&(
+            <div className="w-full h-screen flex items-center justify-center">
+               <div className="w-[1200px] h-[550px] bg-white rounded-md overflow-y-auto">
+                  <div className="w-full h-[40px] py-3 pl-15">
+                     <div onClick={()=>setDetailModal(false)} className="flex items-center cursor-pointer">
+                        <IoIosArrowRoundBack size={25} className="text-red-900"/>
+                        <span className="font-[mulish] text-base font-semibold text-red-900 ">Back</span>
+                     </div>
+                  </div>
+                  <div className="flex items-center justify-around mt-10">
+                     <div className="w-[40%] h-[400px]">
+                        <img src={selectedPefumeProduct.productImage} alt={selectedPefumeProduct.productName} className="w-full h-full object-cover"/>
+                     </div>
+                     <div className="w-[40%]">
+                        <h3 className="text-2xl uppercase font-[mulish] font-semibold text-gray-600 tracking-wide">{selectedPefumeProduct.productName}</h3>
+                        <p className="flex items-center my-3 text-xl font-[mulish] font-bold">Price: <TbCurrencyNaira size={20}/> {Number(selectedPefumeProduct.productPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <div className="w-full p-1 h-[300px] overflow-hidden">
+                           <p className="text-base font-[lato] leading-[25px] w-full h-full overflow-y-auto tracking-wide custom-scrollbar">{selectedPefumeProduct.productDescription || "No product description"}</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            )}
       </div>
    </>);
 }

@@ -13,7 +13,7 @@ function ProductsContent(){
 
     return(<>
         <section className="">
-            <h3 className="font-semibold font-[mulish] text-xl uppercase">Products</h3>
+            <h3 className="font-semibold font-[mulish] text-xl uppercase text-[#242427] tracking-wide">Products</h3>
 
             <div className="mt-3">
                 <div className="flex items-center gap-[20px] bg-[#d1d4fd] rounded-md">

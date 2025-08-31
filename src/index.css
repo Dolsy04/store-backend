@@ -8,3 +8,43 @@ body{
   /* background: ; */
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px; /* thinner */
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a1a1aa; /* gray */
+  border-radius: 9999px;
+  cursor: pointer;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #e5e7eb; /* light gray */
+}
+
+.message-custom-scrollbar::-webkit-scrollbar, .sidebar-custom-scrollbar::-webkit-scrollbar {
+  /* width: 3px;  */
+  display: none;
+}
+
+/* for message display spinner */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid;
+  border-color: #000 #0000;
+  animation: l1 1s infinite;
+}
+@keyframes l1 {to{transform: rotate(.5turn)}}
+
+/* HTML: */
+.loader-send-message {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 3px;
+  background: 
+    radial-gradient(farthest-side,#ffa516 95%,#0000) 50% 0/12px 12px no-repeat,
+    radial-gradient(farthest-side,#0000 calc(100% - 5px),#ffa516 calc(100% - 4px)) content-box;
+  animation: l6 2s infinite ;
+}
+@keyframes l6 {to{transform: rotate(1turn)}}

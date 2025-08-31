@@ -1,5 +1,5 @@
 import { FiUploadCloud } from "react-icons/fi";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { db } from "../../../firebase/db.js";
 import { setDoc, doc, serverTimestamp } from "firebase/firestore";
 import { useOutletContext } from "react-router-dom";
@@ -61,6 +61,7 @@ function AddPerfumeProduct(){
             setResponseMessage("All fields are required, including image");
             return;
         }
+        
 
         setIsLoading(true);
         const id = productName.toLowerCase().replace(/\s+/g, "-");

@@ -1,73 +1,81 @@
 import image from "../assets/image-sign.jpg";
-import {auth} from "../firebase/db.js";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {auth, db} from "../firebase/db.js";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import { useState, useEffect } from "react";
+import {  toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function SignIn(){
     const [emailInput, setEmailInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [isloading, setIsLoading] = useState(false);
-    const [response, setResponse] = useState("");
-    const [count, setCount] = useState(7);
+    // const [response, setResponse] = useState("");
     const Navigate = useNavigate();
 
-    async function handleLogin(e){
+    
+
+    async function handleLogin(e) {
         e.preventDefault();
 
         const email = emailInput.trim();
         const password = passwordInput.trim();
 
-        if(!email || !password){
-            setResponse("All fields are required");
+        if (!email || !password) {
+            toast.error("All fields are required");
             return;
         }
 
-        setIsLoading(true);
-        setResponse("Loading...")
+    setIsLoading(true);
 
-        try{
-            await signInWithEmailAndPassword(auth, email, password);
-            setResponse("Login Successfully");
+    try {
+        
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
 
-            setEmailInput("")
-            setPasswordInput("");
+        const userDocRef = doc(db, "adminUsers", user.uid);
+            const userDoc = await getDoc(userDocRef);
 
-            setTimeout(()=>{
-                Navigate("/overview")
-            },4000)
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
 
-        }catch (error){
+                if (userData.role === "Admin") {
+                    // ---------- Grant access
+                    toast.success("Login Successfully", { position: "top-right", autoClose: 3000 });
+                    setEmailInput("");
+                    setPasswordInput("");
+
+                    setTimeout(() => {
+                        Navigate("/overview");
+                    }, 1000);
+
+                } else {
+                    //---------- Not admin so sign out and redirect
+                    await signOut(auth);
+                    toast.error("Access denied. You are not an admin.", { position: "top-right", autoClose: 3000 });
+                    window.location.href = "https://scp-shop.vercel.app/"; 
+                }
+            } else {
+                // ----------No Firestore record so block access
+                await signOut(auth);
+                toast.error("No account record found. Contact admin.", { position: "top-right", autoClose: 3000 });
+                window.location.href = "https://scp-shop.vercel.app/"; 
+            }
+
+        } catch (error) {
             console.log("Error when trying to login", error.message);
-            setResponse(`Error Occured: ${error.message}`);
-        }
-        finally{
+            toast.error(`Error Occurred: ${error.message}`, { position: "top-right", autoClose: 6000 });
+        } finally {
             setIsLoading(false);
         }
     }
 
-    useEffect(() => {
-        if (response && response !== "Loading...") {
-            setCount(7);
-            const timer = setTimeout(() => setResponse(""), 7000);
-            const countTimer = setInterval(() => {
-                setCount(prev => prev - 1);
-            },1000);
-            return () =>{
-                clearTimeout(timer)
-                clearInterval(countTimer)
-            };
-        }
-    }, [response]);
+    
     return(<>
         <section className="w-full h-screen overflow-hidden">
             <div className="flex items-start justify-between w-full h-full">
                 <div className="relative max-w-[700px] w-full h-full flex flex-col items-center justify-center">
-                    <div className={`bg-red-600 flex items-center justify-center flex-col gap-1 absolute top-3 p-2 rounded-2xl right-2 transition-all duration-500 ease-in-out transform ${response ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}>
-                        <p className="font-bold tracking-wide text-white font-[mulish] py-2 px-2 rounded text-sm">{response}</p>
-                        <p className="font-[mulish] text-sm font-medium text-white">closing</p>
-                        <p className="font-[mulish] text-sm font-medium w-[40px] h-[40px] rounded-full border-2 border-white text-white flex items-center justify-center">{count}s</p>
-                    </div>
                     <div className="bg-white max-w-[400px] w-full shadow-xl p-2 rounded-md">
                         <h2 className="text-3xl font-bold font-[Montserrat] tracking-wide text-blue-700 px-2 uppercase">Sign In</h2>
                         <p className="font-normal text-sm px-2 text-gray-600 font-[Montserrat] tracking-wide">Welcome back! - Fill in your credentials</p>
