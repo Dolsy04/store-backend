@@ -1,10 +1,12 @@
 import Header from "../components/header.jsx";
+import ResSideBar from "../components/resHeader.jsx";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/sidebar.jsx";
 import Footer from "../components/footer.jsx";
+import { IoClose } from "react-icons/io5";
 import { useState, useEffect } from "react";
 
-function Overview(){
+function Overview({isActive, closeSidebar}){
     const [responseMessage, setResponseMessage] = useState("");
     const [count, setCount] = useState(0);
     const [visible, setVisible] = useState(false);
@@ -47,9 +49,16 @@ function Overview(){
     return(<>
             <Header />
         <div className="flex gap-0 h-[90vh] w-full overflow-hidden bg-[#f5f2f2]">
-            <div className="max-w-[300px] w-full h-[90vh] overflow-y-scroll relative bg-white sidebar-custom-scrollbar">
+            <div className="lg:max-w-[300px] w-full lg:h-[90vh] overflow-y-scroll absolute top-0 left-0 z-50 lg:relative bg-white sidebar-custom-scrollbar hidden lg:block">
                 <Sidebar />
             </div>
+
+            <div className={`w-[100%] h-[100vh] overflow-y-auto fixed top-0 bottom-0 z-50 lg:relative bg-[#141414cb] sidebar-custom-scrollbar block lg:hidden transition-all duration-300 ease-in-out ${isActive ? "left-0" : "left-[-100%]"}`}>
+                <div className={`w-[90%] h-full overflow-y-auto bg-white`}>
+                    <ResSideBar closeSidebar={closeSidebar}/>
+                </div>
+            </div>
+
             <div className="w-full bg-[#f2f2f2] flex flex-col overflow-y-scroll">
                 {responseMessage && (
                     <div className={`fixed top-15 left-1/2 -translate-x-1/2 transition-all duration-500 z-[100] w-[320px] text-white bg-blue-600 rounded-xl shadow px-4 py-4 text-center text-sm font-[mulish] ${isSuccess ? "bg-green-600" : ""} ${isError ? "bg-red-600" : ""} ${visible ? "opacity-100 translate-y-0": "opacity-0 -translate-y-5"}`}>

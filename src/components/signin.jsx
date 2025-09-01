@@ -74,7 +74,7 @@ function SignIn(){
     
     return(<>
         <section className="w-full h-screen overflow-hidden">
-            <div className="flex items-start justify-between w-full h-full">
+            <div className="flex items-start justify-between w-full h-full lg:relative md:relative relative">
                 <div className="relative max-w-[700px] w-full h-full flex flex-col items-center justify-center">
                     <div className="bg-white max-w-[400px] w-full shadow-xl p-2 rounded-md">
                         <h2 className="text-3xl font-bold font-[Montserrat] tracking-wide text-blue-700 px-2 uppercase">Sign In</h2>
@@ -97,8 +97,8 @@ function SignIn(){
                         </div>
                     </div>
                 </div>
-                <div>
-                    <img src={image} alt="" className=""/>
+                <div className="lg:relative absolute inset-0 -z-50 w-full h-screen">
+                    <img src={image} alt="" className="w-full h-full lg:h-auto object-cover"/>
                 </div>
             </div>
         </section>

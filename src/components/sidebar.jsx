@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { BiSolidDashboard } from "react-icons/bi";
 import { RiProductHuntFill } from "react-icons/ri";
 import { MdMessage, MdReceipt, MdOutlineAssignment, MdManageAccounts } from "react-icons/md";
@@ -63,7 +62,7 @@ function Sidebar(){
 
 
     return(<>
-        <nav className="w-full h-[90vh] flex items-start justify-between gap-10 flex-col pl-7 pb-3 relative">
+        <nav className={`w-full h-[90vh] flex lg:relative items-start justify-between lg:gap-10 flex-col pl-7 pb-3`}>
             <ul className="flex items-start gap-[10px] justify-between flex-col">
                 <li>
                     <NavLink to="/overview"  end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
