@@ -77,38 +77,38 @@ export default function ResSideBar({closeSidebar}){
             <ul className="flex items-start gap-[10px] justify-between flex-col w-full ">
         
             <li>
-                <NavLink to="/overview"  end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
+                <NavLink onClick={closeSidebar} to="/overview"  end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
                     <BiSolidDashboard size={20} className="" />
                     <span>Dashboard</span>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="productpage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
+                <NavLink onClick={closeSidebar} to="productpage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
                     <RiProductHuntFill size={20} className=""/>
                     <span>Products</span>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="orderpage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
+                <NavLink onClick={closeSidebar} to="orderpage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
                     <MdOutlineAssignment size={20} className=""/>
                     <span>Orders</span>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="invoicepage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
+                <NavLink onClick={closeSidebar} to="invoicepage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
                     <MdReceipt size={20} className=""/>
                     <span>Invoices</span>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="messagepage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
+                <NavLink onClick={closeSidebar} to="messagepage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600  hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
                     <MdMessage size={20} className=""/>
                     <span>Inbox</span>
                     <span className="bg-orange-600 text-sm text-white w-auto h-[20px] flex items-center justify-center rounded p-1">{String(unreadCount).padStart("2", 0)}</span>
                 </NavLink>
             </li>
             <li>
-                <NavLink to="userMangerpage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600 hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
+                <NavLink onClick={closeSidebar} to="userMangerpage" end className={({isActive}) => `hover:bg-blue-200 hover:text-blue-600 hover:py-2 hover:px-6 hover:rounded-full transition-all duration-500 flex items-center gap-2 mt-4 ${isActive ? "bg-blue-200 py-2 px-6 rounded-full text-blue-600 font-[mulish] text-sm font-semibold tracking-wide" : "text-gray-700 text-sm font-[mulish] tracking-wide font-medium"}`}>
                     <MdManageAccounts size={20} className=""/>
                     <span>Manage User</span>
                 </NavLink>
