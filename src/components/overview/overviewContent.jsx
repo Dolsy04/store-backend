@@ -272,8 +272,8 @@ export default function OverviewContent(){
         <section>
             {/* <h2 className="font-[mulish] text-2xl uppercase font-semibold text-[#00150b] tracking-wide">Dashboard</h2> */}
            
-           <div className="bg-white flex items-center justify-center gap-7 p-4 rounded-xl">
-                <div className="flex items-start gap-3 border-r pr-10 border-gray-300">
+           <div className="bg-white flex items-center justify-center gap-7 p-4 rounded-xl lg:flex-row flex-col">
+                <div className="flex items-start gap-3 lg:border-r lg:pr-10 border-gray-300 border-b pb-8">
                     <div className="w-[40px] h-[40px] bg-white rounded-full flex items-center justify-center">
                         <FiShoppingBag className="text-blue-600" size={20}/>
                     </div>
@@ -282,7 +282,7 @@ export default function OverviewContent(){
                         <p className="font-[mulish] text-2xl mt-2 font-bold tracking-wider text-gray-700">{String(totalOrder).padStart("3",0)}</p>
                     </div>
                 </div>
-                <div className="flex items-start gap-3 border-r pr-10 border-gray-300">
+                <div className="flex items-start gap-3 lg:border-r lg:pr-10 border-gray-300 border-b pb-8">
                     <div className="w-[40px] h-[40px] bg-white rounded-full flex items-center justify-center">
                         <FiMail className="text-blue-600" size={20}/>
                     </div>
@@ -291,7 +291,7 @@ export default function OverviewContent(){
                         <p className="font-[mulish] text-2xl mt-2 font-bold tracking-wider text-gray-700">{String(totalMessage.length).padStart("3", 0)}</p>
                     </div>
                 </div>
-                <div className="flex items-start gap-3 border-r pr-10 border-gray-300">
+                <div className="flex items-start gap-3 lg:border-r lg:pr-10 border-gray-300 border-b pb-8">
                     <div className="w-[40px] h-[40px] bg-white rounded-full flex items-center justify-center">
                         <FiUsers className="text-blue-600" size={20}/>
                     </div>
@@ -313,7 +313,7 @@ export default function OverviewContent(){
 
            {/* bar & pie chart */}
 
-           <div className="w-full h-64 flex items-center gap-10 mt-10">
+           <div className="w-full lg:h-64 h-[500px] flex items-center gap-10 mt-10 lg:flex-row flex-col">
                 <div className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 p-2 w-full h-full rounded-xl">
                     <ResponsiveContainer width="100%" height="100%">
                         <ComposedChart data={data}>
@@ -359,7 +359,7 @@ export default function OverviewContent(){
                     </ResponsiveContainer>
                 </div>
 
-                <div className="bg-white w-[45%] h-full rounded-xl">
+                <div className="bg-white lg:w-[45%] w-[100%] h-full rounded-xl">
                     <ResponsiveContainer width="100%" height="90%">
                         <PieChart>
                             <Pie 
@@ -393,11 +393,11 @@ export default function OverviewContent(){
                 </div>
            </div>
 
-           <div className="w-full h-[350px] mt-10 flex items-center gap-5">
-            <div className="w-[45%] h-full bg-white rounded-xl">
+           <div className="w-full lg:h-[350px] h-auto mt-10 flex items-center gap-5 lg:flex-row flex-col">
+            <div className="lg:w-[45%] w-full h-full bg-white rounded-xl">
                 <RecentInbox />
             </div>
-            <div className="w-[70%] h-full bg-white rounded-xl">
+            <div className="lg:w-[70%] w-full h-full bg-white rounded-xl">
                 <RecentOrder />
             </div>
            </div>

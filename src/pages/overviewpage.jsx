@@ -62,7 +62,7 @@ function Overview(){
                         </div>
                     </div>
                 )}
-                <div className="grow px-10 py-10 ">
+                <div className="grow lg:px-10 py-10 px-2 ">
                     <Outlet context={{setResponseMessage}}/>
                 </div>
                 <hr className="border border-gray-300 w-[95%] mx-auto"/>
