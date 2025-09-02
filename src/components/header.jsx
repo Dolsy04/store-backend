@@ -84,12 +84,13 @@ function Header(){
 
     return unsubscribe; // so you can clean up in useEffect
     };
+    
     useEffect(() => {
-  const unsubscribe = fetchProfile();
-  return () => {
-    if (unsubscribe) unsubscribe();
-  };
-}, [authUser]);
+        const unsubscribe = fetchProfile();
+        return () => {
+            if (unsubscribe) unsubscribe();
+        };
+    }, [authUser]);
 
     useEffect(() => {
         if (!authUser) return;
@@ -117,7 +118,7 @@ function Header(){
         <header className="w-full h-[10vh] lg:p-2 bg-[#fff]  items-center justify-between sticky top-0 z-50 flex">
              <div className="flex gap-2 p-0.5 rounded ml-3">
                 <div className="flex items-center gap-6 lg:gap-0">
-                    <RxHamburgerMenu size={24} className="lg:hidden block" onClick={handleSidebar}/>
+                    <RxHamburgerMenu size={24} className="lg:hidden block" onClick={()=>handleSidebar()}/>
                     <div>
                         <p className="text-blue-950 font-bold font-[Montserrat] uppercase tracking-wider text-xl">scps</p>
                         <p className="font-[lato] text-blue-950 text-xs tracking-wide">SHOE-CLOTH-PEFUME STORE</p>
@@ -149,11 +150,14 @@ function Header(){
                 </Link>
             </div>
 
-           {openSidebar && (
-                <div className="fixed top-0 left-0 w-[80%] max-w-[300px] h-full bg-white shadow-lg z-50 transition-transform duration-300">
-                <ResSideBar isActive={openSidebar} closeSidebar={() => setOpenSidebar(false)} />
-                </div>
-            )}
+            <div className={`w-full h-[100vh] overflow-y-auto fixed top-0 z-50 lg:relative bg-[#000000ab] sidebar-custom-scrollbar block lg:hidden transition-all duration-500 
+            ${openSidebar ? "left-0" : "left-[-100%]"}`}> 
+                {openSidebar && (
+                    <div className={`w-[90%] h-[100vh] overflow-y-auto relative bg-white sidebar-custom-scrollbar block lg:hidden transition-all duration-300 ${openSidebar ? "opacity-100" : "opacity-30"}`}>
+                        <ResSideBar closeSidebar={() => setOpenSidebar(false)}/>
+                    </div>
+                )}
+            </div>
         </header>
     </>)
 }

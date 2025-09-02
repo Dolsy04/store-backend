@@ -6,7 +6,7 @@ import Footer from "../components/footer.jsx";
 import { IoClose } from "react-icons/io5";
 import { useState, useEffect } from "react";
 
-function Overview({isActive, closeSidebar}){
+function Overview(){
     const [responseMessage, setResponseMessage] = useState("");
     const [count, setCount] = useState(0);
     const [visible, setVisible] = useState(false);
@@ -49,14 +49,8 @@ function Overview({isActive, closeSidebar}){
     return(<>
             <Header />
         <div className="flex gap-0 h-[90vh] w-full overflow-hidden bg-[#f5f2f2]">
-            <div className="lg:max-w-[300px] w-full lg:h-[90vh] overflow-y-scroll absolute top-0 left-0 z-50 lg:relative bg-white sidebar-custom-scrollbar hidden lg:block">
+            <div className="lg:max-w-[300px] w-full lg:h-[90vh] overflow-y-scroll  top-0 left-0 z-50 lg:relative bg-white sidebar-custom-scrollbar hidden lg:block">
                 <Sidebar />
-            </div>
-
-            <div className={`w-[100%] h-[100vh] overflow-y-auto fixed top-0 bottom-0 z-50 lg:relative bg-[#141414cb] sidebar-custom-scrollbar block lg:hidden transition-all duration-300 ease-in-out ${isActive ? "left-0" : "left-[-100%]"}`}>
-                <div className={`w-[90%] h-full overflow-y-auto bg-white`}>
-                    <ResSideBar closeSidebar={closeSidebar}/>
-                </div>
             </div>
 
             <div className="w-full bg-[#f2f2f2] flex flex-col overflow-y-scroll">

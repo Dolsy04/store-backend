@@ -1,6 +1,6 @@
 import { IoClose } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { db, auth } from "../../firebase/db.js"; 
+import { db, auth, secondaryAuth } from "../../firebase/db.js"; 
 import { collection, setDoc, onSnapshot, orderBy, query, updateDoc, doc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
@@ -66,132 +66,74 @@ export default function UserMangerContent() {
         }
     };
 
+      const handleAddAdmin = async (e) => {
+      e.preventDefault();
+
+      // ✅ Validate inputs
+      if (
+        !fullName.trim() ||
+        !email.trim() ||
+        !phoneNumber.trim() ||
+        !role.trim() ||
+        !password.trim() ||
+        !position.trim()
+      ) {
+        toast.error("All fields are required", { position: "top-center", autoClose: 3000 });
+        return;
+      }
+
+      setIsLoading(true);
+
+      try {
+        // 1. Create the new user with secondaryAuth
+        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+        const newUser = userCredential.user;
+
+        // 2. Write to Firestore (still authenticated as admin with `auth`)
+        await setDoc(doc(db, "adminUsers", newUser.uid), {
+          id: newUser.uid,
+          name: fullName,
+          email,
+          phoneNumber,
+          role,
+          position,
+          profileImage: "",
+          createdAt: new Date().toISOString(),
+        });
+
+        // 3. Immediately sign out from secondaryAuth to avoid session conflicts
+        await secondaryAuth.signOut();
+
+        // 4. Notify success
+        toast.success("Admin Account Created Successfully!", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+
+        // 5. Reset form
+        setFullName("");
+        setEmail("");
+        setPhoneNumber("");
+        setRole("Admin");
+        setPosition("");
+        setPassword("");
+      } catch (error) {
+        let errorMsg = "Something went wrong!";
+        if (error.code === "auth/email-already-in-use") {
+          errorMsg = "This email is already registered!";
+        } else if (error.code === "auth/weak-password") {
+          errorMsg = "Password should be at least 6 characters.";
+        }
+        toast.error(errorMsg, { position: "top-center", autoClose: 12000 });
+        console.error("Error creating admin:", error);
+      } finally {
+        setIsLoading(false);
+        setShowAddAdmin(false);
+        fetchUsers(); // Refresh table
+      }
+      };
 
 
-
-  // Add Admin
-    // const handleAddAdmin = async (e) => {
-    //     e.preventDefault();
-
-    //     if(!fullName.trim() || !email.trim() || !phoneNumber.trim() || !role.trim() || !password.trim() || !position.trim()) {
-    //         toast.error("All field are required", {position: "top-center", autoClose: 2000});
-    //         return;
-    //     }
-
-    //     setIsLoading(true);
-
-    //     try{
-    //         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    //         const newUser = userCredential.user;
-
-    //         await setDoc(doc(db, "adminUsers", newUser.uid),{
-    //             id: newUser.uid,
-    //             name: fullName,
-    //             email: email,
-    //             phoneNumber: phoneNumber,
-    //             role: role,
-    //             position: position,
-    //             profileImage: "",
-    //             createdAt: new Date().toISOString(),
-    //         })
-
-    //         toast.success("Account Created Successfully", {position: "top-center", autoClose: 2000});
-    //         setFullName("");
-    //         setEmail("");
-    //         setPhoneNumber("");
-    //         setRole("Admin");
-    //         setPosition("");
-    //         setPassword("");
-
-    //     }catch(error){
-    //     let errorMsg = "Something went wrong!";
-    //         if(error.code === "auth/email-already-in-use") {
-    //             errorMsg = "This email is already registered!";
-    //         } else if(error.code === "auth/weak-password") {
-    //             errorMsg = "Password should be at least 6 characters.";
-    //         }
-    //         toast.error(errorMsg, {position: "top-center", autoClose: 12000});
-    //         console.log(`Error fectching users: ${error}`)
-    //         setIsLoading(false);
-    //     }finally{
-    //         setIsLoading(false);
-    //     }
-
-    //     setShowAddAdmin(false);
-    //     fetchUsers();
-    // };
-
-
-    const handleAddAdmin = async (e) => {
-  e.preventDefault();
-
-  if (
-    !fullName.trim() ||
-    !email.trim() ||
-    !phoneNumber.trim() ||
-    !role.trim() ||
-    !password.trim() ||
-    !position.trim()
-  ) {
-    toast.error("All field are required", { position: "top-center", autoClose: 2000 });
-    return;
-  }
-
-  setIsLoading(true);
-
-  try {
-    // 1. Save current admin login info
-    const currentAdminEmail = auth.currentUser.email;
-    const currentAdminPassword = prompt("Re-enter your admin password to confirm:");
-
-    // 2. Create the new user (this logs you in as them)
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const newUser = userCredential.user;
-
-    // 3. Sign back in as the original admin
-    await signInWithEmailAndPassword(auth, currentAdminEmail, currentAdminPassword);
-
-    // 4. Now safe to add Firestore record as admin
-    await setDoc(doc(db, "adminUsers", newUser.uid), {
-      id: newUser.uid,
-      name: fullName,
-      email: email,
-      phoneNumber: phoneNumber,
-      role: role,
-      position: position,
-      profileImage: "",
-      createdAt: new Date().toISOString(),
-    });
-
-    toast.success("Account Created Successfully", {
-      position: "top-center",
-      autoClose: 2000,
-    });
-
-    // Reset form
-    setFullName("");
-    setEmail("");
-    setPhoneNumber("");
-    setRole("Admin");
-    setPosition("");
-    setPassword("");
-  } catch (error) {
-    let errorMsg = "Something went wrong!";
-    if (error.code === "auth/email-already-in-use") {
-      errorMsg = "This email is already registered!";
-    } else if (error.code === "auth/weak-password") {
-      errorMsg = "Password should be at least 6 characters.";
-    }
-    toast.error(errorMsg, { position: "top-center", autoClose: 12000 });
-    console.error("Error creating admin:", error);
-    setIsLoading(false);
-  } finally {
-    setIsLoading(false);
-  }
-
-  setShowAddAdmin(false);
-  fetchUsers();
-};
 
   return (
     <div className="p-6">

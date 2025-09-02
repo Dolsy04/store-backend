@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
-export default function ResSideBar({ closeSidebar}){
+export default function ResSideBar({closeSidebar}){
     const [isLoading, setLoading] = useState(false);
     const [storeAllMessage, setStoreAllMessage] = useState([]);
     const navigate = useNavigate();
@@ -121,8 +121,6 @@ export default function ResSideBar({ closeSidebar}){
                     <span>Sign out</span>
                 </div>
             </div>
-
-            
         </nav>
     </div>)
 }

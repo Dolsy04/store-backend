@@ -21,12 +21,14 @@ const frontendfirebaseConfig = {
   measurementId: import.meta.env.VITE_FRONTEND_MEASUREMENT_ID,
 };
 
-
+const secondaryApp = initializeApp(backendfirebaseConfig, "secondaryBackend");
 const app = initializeApp(backendfirebaseConfig);
 const userApp = initializeApp(frontendfirebaseConfig, "userConfigure"); //-------frontend Auth
 
+export const secondaryAuth = getAuth(secondaryApp);
 export const auth = getAuth(app);
 export const userAuth = getAuth(userApp); //-------frontend Auth
 
 export const db = getFirestore(app);
 export const userDB = getFirestore(userApp); //-------frontend Auth
+
